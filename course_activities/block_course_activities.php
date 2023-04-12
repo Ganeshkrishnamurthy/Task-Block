@@ -53,8 +53,9 @@ class block_course_activities extends block_base {
                     continue;
                 }
                 $state = $DB->get_field('course_modules_completion', 'id', array('coursemoduleid' => $activity->cm, 'userid' => $USER->id));
+                $status = (!empty($state) ? get_string('completed', 'block_course_activities') : "");
                 $link = $CFG->wwwroot.'/mod/'.$activity->mod.'/view.php?id='.$activity->cm;
-                $data = array('link' => $link, 'cm' => $activity->id, 'name' => $activity->name, 'added' => date('d-M-Y', $activity->added), 'completion' => (!empty($state) ? get_string('completed', 'block_course_activities') : ""));
+                $data = array('link' => $link, 'cm' => $activity->id, 'name' => $activity->name, 'added' => date('d-M-Y', $activity->added), 'completion' => $status);
                 $html .= $OUTPUT->render_from_template('block_course_activities/list', $data);
             }
         }

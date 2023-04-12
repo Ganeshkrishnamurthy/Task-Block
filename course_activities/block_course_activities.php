@@ -44,18 +44,18 @@ class block_course_activities extends block_base {
     }
     public function get_activity_list() {
         global $DB, $CFG, $USER, $COURSE, $OUTPUT;
-        //to get all the activities inside the course
+        // To get all the activities inside the course.
         $activities = get_array_of_activities($COURSE->id);
         $html = "";
         if (!empty($activities)) {
             foreach ($activities as $activity) {
-                if($DB->get_field('course_modules','deletioninprogress',array('id'=>$activity->cm))){
+                if($DB->get_field('course_modules', 'deletioninprogress', array('id' => $activity->cm))) {
                     continue;
                 }
                 $state = $DB->get_field('course_modules_completion', 'id', array('coursemoduleid' => $activity->cm, 'userid' => $USER->id));
                 $link = $CFG->wwwroot.'/mod/'.$activity->mod.'/view.php?id='.$activity->cm;
-                $data = array('link'=>$link,'cm'=>$activity->id,'name'=>$activity->name,'added'=>date('d-M-Y', $activity->added),'completion'=>(!empty($state)?get_string('completed', 'block_course_activities'):""));
-                $html.=$OUTPUT->render_from_template('block_course_activities/list',$data);
+                $data = array('link' => $link, 'cm' => $activity->id, 'name' => $activity->name, 'added' => date('d-M-Y', $activity->added), 'completion' => (!empty($state) ? get_string('completed', 'block_course_activities') : ""));
+                $html .= $OUTPUT->render_from_template('block_course_activities/list', $data);
             }
         }
         return $html;
